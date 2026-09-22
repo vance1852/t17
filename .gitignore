@@ -35,3 +35,8 @@ Thumbs.db
 
 # 其他
 *.tmp
+
+# 运行时生成的分析结果
+output/
+output_*/
+test_output/

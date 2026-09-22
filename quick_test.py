@@ -173,36 +173,33 @@ from wind_farm_opt.visualization.plotting import (
 
 os.makedirs("test_output", exist_ok=True)
 
-try:
-    plot_wind_rose(wr, save_path="test_output/wind_rose.png", show=False)
-    print("   ✓ 风玫瑰图已生成")
+plot_wind_rose(wr, save_path="test_output/wind_rose.png", show=False)
+print("   ✓ 风玫瑰图已生成")
 
-    losses = np.array([tr.wake_loss_pct for tr in result.turbine_results])
-    plot_farm_layout(
-        positions, boundary, rotor_diameters,
-        turbine_losses=losses,
-        turbine_names=[f"#{i}" for i in range(n_turb)],
-        save_path="test_output/layout.png",
-        show=False,
-    )
-    print("   ✓ 布局图已生成")
+losses = np.array([tr.wake_loss_pct for tr in result.turbine_results])
+plot_farm_layout(
+    positions, boundary, rotor_diameters,
+    turbine_losses=losses,
+    turbine_names=[f"#{i}" for i in range(n_turb)],
+    save_path="test_output/layout.png",
+    show=False,
+)
+print("   ✓ 布局图已生成")
 
-    plot_convergence(
-        opt_result,
-        baseline_aep=result.net_aep * 1e3,
-        save_path="test_output/convergence.png",
-        show=False,
-    )
-    print("   ✓ 收敛曲线已生成")
+plot_convergence(
+    opt_result,
+    baseline_aep=result.net_aep * 1e3,
+    save_path="test_output/convergence.png",
+    show=False,
+)
+print("   ✓ 收敛曲线已生成")
 
-    plot_turbine_loss_bar(
-        result,
-        save_path="test_output/losses.png",
-        show=False,
-    )
-    print("   ✓ 损失柱状图已生成")
-except Exception as e:
-    print(f"   ⚠ 可视化警告: {e}")
+plot_turbine_loss_bar(
+    result,
+    save_path="test_output/losses.png",
+    show=False,
+)
+print("   ✓ 损失柱状图已生成")
 
 print("\n" + "=" * 60)
 print("所有核心测试通过! ✓")

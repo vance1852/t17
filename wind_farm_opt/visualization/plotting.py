@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib import font_manager
 from matplotlib.patches import Polygon, Circle
 from matplotlib.colors import Normalize, LinearSegmentedColormap
 
@@ -21,14 +22,18 @@ from ..optimization.ga import OptimizeResult
 
 def set_chinese_font() -> None:
     """设置中文字体支持。"""
-    font_options = ["Microsoft YaHei", "SimHei", "Arial Unicode MS", "DejaVu Sans"]
-    for font in font_options:
-        try:
+    # 字体配置不能只写入一个可能不存在的字体名，否则无头 Linux
+    # 环境会在每个图表元素上重复输出 findfont 警告。
+    installed = {font.name for font in font_manager.fontManager.ttflist}
+    for font in ("Microsoft YaHei", "SimHei", "Noto Sans CJK SC", "Arial Unicode MS"):
+        if font in installed:
             plt.rcParams["font.sans-serif"] = [font]
-            plt.rcParams["axes.unicode_minus"] = False
             break
-        except Exception:
-            continue
+    else:
+        # DejaVu Sans 是 Matplotlib 的稳定后备字体，至少保证拉丁字符和
+        # 负号正常显示；没有中文字体时不再反复尝试不存在的字体。
+        plt.rcParams["font.sans-serif"] = ["DejaVu Sans"]
+    plt.rcParams["axes.unicode_minus"] = False
 
 
 def plot_farm_layout(
